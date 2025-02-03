@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Nitai Famaly</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+	<script src="js/massive.js" defer></script>
+	<script src="js/javascript.js" defer></script>
+
+</head>
+<body>
+<main>
+	<input class="SearchItem" placeholder="Insert your Food."></input>
+<div class="container">
+	<!-- лівий блок -->
+	<div class="items">	</div>
+	<!-- правий блок -->
+	<div class="foodOrder"> 
+		<div>
+				<div id="ordersContainer"></div>
+				<button id="saveBtn">Додати замовлення</button>
+				<button id="saveArr" class="hidden">Зберігти</button>
+
+				<div id="savedOrdersContainer"></div>
+				<div id="ordersSummary"></div>
+				<button id="updateOrdersBtn">Оновити список замовлень</button>
+					<!-- Видаляє всю інформацю з локал стор localArr -->
+					<!-- <button class="clearLocal">ClearAll</button> -->
+					
+				<!-- <div class="orderPanel"> -->
+					<!-- <div id="tableContainer"></div> -->
+
+				<!-- </div> -->
+				
+				<div class="addingIngBlock">
+					<!-- Додати інгредієнт 1 -->
+					<button id="AddSubtractButton" > Інгрідієнти</button>
+					<div class="addItemsDiv hide" >
+						<div id="ingredientsContainer"></div>
+						<input type="text" id="newKey" placeholder="Новий інгредієнт">
+						<input type="number" id="newValue" placeholder="Кількість">
+						<button id="addIngredient">Добавити</button>
+					</div>
+					<!-- Залишки -->
+					<button id="btnShowCount"> Залишки.</button>
+					<div class="ShowTable hide"> </div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+	
+	
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</body>
+</html>
