@@ -209,13 +209,14 @@ h1{
 
 /* Стиль для кнопок */
 .orders-table button {
-  background-color: #ff6600;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+	font-size: 2rem;
+	background-color: #ff6600;
+	color: white;
+	border: none;
+	padding: 6px 10px;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s;
 }
 
 .orders-table button:hover {
