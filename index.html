@@ -14,7 +14,7 @@
 </head>
 <body>
 <main>
-	<input class="SearchItem" placeholder="Insert your Food."></input>
+	<input class="SearchItem" placeholder="Введіть назву їжі."></input>
 <div class="container">
 	<!-- лівий блок -->
 	<div class="items">	</div>
@@ -27,14 +27,11 @@
 
 				<div id="savedOrdersContainer"></div>
 				<div id="ordersSummary"></div>
-				<button id="updateOrdersBtn">Оновити список замовлень</button>
-					<!-- Видаляє всю інформацю з локал стор localArr -->
-					<!-- <button class="clearLocal">ClearAll</button> -->
+				<div id="summaryTable"></div>
+					<!-- Видаляє всю інформацю з localStorage -->
+					<button class="clearLocal">ClearAll</button>
 					
-				<!-- <div class="orderPanel"> -->
-					<!-- <div id="tableContainer"></div> -->
 
-				<!-- </div> -->
 				
 				<div class="addingIngBlock">
 					<!-- Додати інгредієнт 1 -->
@@ -47,8 +44,9 @@
 					</div>
 					<!-- Залишки -->
 					<button id="btnShowCount"> Залишки.</button>
-					<div class="ShowTable hide"> </div>
+					<div class="ShowTable"> </div>
 				</div>
+				
 			</div>
 
 		</div>
