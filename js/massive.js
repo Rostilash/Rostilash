@@ -193,7 +193,7 @@
 	
 	
 	const cleareBtn = document.querySelector(".clearLocal");
-	let localArr = JSON.parse(localStorage.getItem('localArr')) || [];
+	// let localArr = JSON.parse(localStorage.getItem('localArr')) || [];
 	// Функція додавання до замовлення
 	const totalIngredients = {}; // Об'єкт для збереження загальної кількості інгредієнтів
 		
@@ -253,24 +253,24 @@ function addOrder(name, size, cost, ingredients, dataName) {
         });
     }
 
-    console.log("Оновлений totalIngredients:", totalIngredients);
+    // console.log("Оновлений totalIngredients:", totalIngredients);
 
     // Оновлюємо таблицю
     renderOrdersTable();
 }
 
-
 // Функція для оновлення загальних інгредієнтів
-function updateTotalIngredients(ingredients, factor) {
-    Object.entries(ingredients).forEach(([ingredient, amount]) => {
-        totalIngredients[ingredient] = (totalIngredients[ingredient] || 0) + amount * factor;
+// function updateTotalIngredients(ingredients, factor) {
+    // Object.entries(ingredients).forEach(([ingredient, amount]) => {
+        // totalIngredients[ingredient] = (totalIngredients[ingredient] || 0) + amount * factor;
 
         // Якщо значення стало 0 або менше - видаляємо ключ
-        if (totalIngredients[ingredient] <= 0) {
-            delete totalIngredients[ingredient];
-        }
-    });
-}
+        // if (totalIngredients[ingredient] <= 0) {
+            // delete totalIngredients[ingredient];
+        // }
+    // });
+// }
+
 // Функція додавання додаткових інгредієнтів
 function addExtra(orderName, extraName, extraAmount, extraCost) {
     if (!orders[orderName].extras[extraName]) {
@@ -295,10 +295,10 @@ function removeExtra(orderName, extraName) {
 }
 
 // Функція видалення замовлення
-function removeOrder(orderName) {
-    delete orders[orderName];
-    renderOrdersTable(); // Оновлюємо таблицю
-}
+// function removeOrder(orderName) {
+    // delete orders[orderName];
+    // renderOrdersTable(); // Оновлюємо таблицю
+// }
 
 let hiddenOrders = JSON.parse(localStorage.getItem("hiddenOrders")) || []; // Завантажуємо масив прихованих замовлень з localStorage
 
@@ -317,17 +317,13 @@ document.getElementById("saveArr").addEventListener("click", () => {
         createdAt: new Date().toISOString()
     };
 
-    console.log("Загальна кількість інгредієнтів у всіх замовленнях:", totalIngredients);
-    console.log(orderId, orderWithTime);
-
     // Оновлення масиву замовлень
-    orderArray.push(orderWithTime);
-    
+    // orderArray.push(orderWithTime);
+  
     try {
-        localStorage.setItem("OrderArray", JSON.stringify(orderArray)); // Зберігаємо у localStorage
-        
+        // localStorage.setItem("OrderArray", JSON.stringify(orderArray)); // Зберігаємо у localStorage
         // 🔹 Якщо localStorage оновився без помилок, віднімаємо інгредієнти
-        subtractIngredients(allIngredients2, [totalIngredients]);
+		subtractIngredients(totalIngredients);
     } catch (error) {
         console.error("Помилка при збереженні в localStorage:", error);
     }
@@ -666,7 +662,6 @@ function groupOrders() {
 
         // Розбиваємо текст на окремі інгредієнти (name x кількість) за допомогою розділення по комі
         let items = orderText.split(",").map(item => item.trim()); // Окремі інгредієнти
-		console.log(items);
         items.forEach(item => {
             let matches = item.match(/(.+?)\s*x(\d+)/);
 
@@ -799,19 +794,19 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	
-document.getElementById('AddSubtractButton').addEventListener('click', function() {
-    document.querySelector('.addingIngBlock').classList.add('showModal');
-});
+// document.getElementById('AddSubtractButton').addEventListener('click', function() {
+    // document.querySelector('.addingIngBlock').classList.add('showModal');
+// });
 
-document.getElementById('btnShowCount').addEventListener('click', function() {
-    document.querySelector('.addingIngBlock').classList.add('showModal');
-});
+// document.getElementById('btnShowCount').addEventListener('click', function() {
+    // document.querySelector('.addingIngBlock').classList.add('showModal');
+// });
 	
-	document.querySelector('.addingIngBlock').addEventListener('click', function(e) {
-  if (e.target === this) {
-    this.classList.remove('showModal');
-  }
-});
+	// document.querySelector('.addingIngBlock').addEventListener('click', function(e) {
+  // if (e.target === this) {
+    // this.classList.remove('showModal');
+  // }
+// });
 	
 	
 	
@@ -879,71 +874,61 @@ document.getElementById('btnShowCount').addEventListener('click', function() {
 
 
 //-*/*-* Додавання Ігрідієнтів
-if(!localStorage.getItem("AllMyIngrid")){
-	localStorage.setItem("AllMyIngrid", JSON.stringify(defaultAllMyIngrid));
-}
-function getAllMyIngrid(){
-	return JSON.parse(localStorage.getItem('AllMyIngrid')) || {};
-}
-function updateAllMyIngrid(updatedIngrid){
-	localStorage.setItem('AllMyIngrid', JSON.stringify(updatedIngrid));
-}
-const allIngredients2 = getAllMyIngrid();	
-//Віднімання Ігрідієнтів
-function subtractIngredients(allIngredients, cardItems) {
-	console.log(allIngredients, cardItems);
-    if (!Array.isArray(cardItems) || cardItems.length === 0) {
-    console.error("Другий параметр порожній або не є масивом");
-    return;
-  }
 
-    if (typeof allIngredients !== "object" || allIngredients === null) {
-    console.error("1 елемент має бути об'єктом");
-    return;
-  }
+const getAllMyIngrid = () => {
+  return JSON.parse(localStorage.getItem('AllMyIngrid')) || {};
+};
+const allIngredients2 = getAllMyIngrid();
 	
-	// const sortedEntries = Object.entries(allIngredients).sort((a, b) => a[1] - b[1]);
-	// for (const [key, value] of sortedEntries) {
-		// console.log(key, value); // Тепер цикл починається з найменшого значення
-	// }
-	
-	
-for (const item of cardItems) {
-    // Отримуємо відсортовані ключі за значеннями в allIngredients
-    const sortedKeys = Object.keys(item).sort((a, b) => allIngredients[a] - allIngredients[b]);
-	
-    for (const key of sortedKeys) {
-        if (allIngredients[key] !== undefined) {
-            allIngredients[key] -= item[key];
-            console.log(allIngredients[key], item[key]);
+// Функція віднімання інгредієнтів
+function subtractIngredients(cardItems) {
+    if (typeof cardItems !== "object" || cardItems === null) {
+        console.error("Параметр має бути об'єктом");
+        return;
+    }
 
-            if (allIngredients[key] <= 0 && allIngredients[key] < item[key]) {
-                console.warn(`Запас вичерпано для: ${key}`);
-                alert(`У вас не вистачає інгредієнта ${key} ${allIngredients[key]} грам(ів) для приготування даної страви.`);
-                return getAllMyIngrid(); // Зупиняємо виконання
-            } else {
-                console.warn(`Все добре, ми записуємо`);
-                localStorage.setItem('localArr', JSON.stringify(localArr));
-                updateAllMyIngrid(allIngredients);
+    const sortedEntries = Object.entries(allIngredients2).sort((a, b) => a[1] - b[1]);
+    Object.assign(allIngredients2, Object.fromEntries(sortedEntries));
+    console.log("✅ Відсортовані allIngredients2:", allIngredients2);
+    console.log("cardItems:", cardItems);
+    for (const key in cardItems) {
+        if (cardItems.hasOwnProperty(key)) {
+            if (allIngredients2[key] === undefined) {
+                console.error(`❌ Інгредієнт ${key} відсутній у allIngredients2`);
+                alert(`❌ Інгредієнт ${key} відсутній. Віднімання неможливе.`);
+                return;
+            }
+            if (allIngredients2[key] < cardItems[key]) {
+                console.error(`❌ Недостатньо ${key}: потрібно ${cardItems[key]}, а є тільки ${allIngredients2[key]}`);
+                alert(`❌ Недостатньо інгредієнта ${key}. Віднімання не виконано.`);
+                return;
             }
         }
     }
+
+    for (const key in cardItems) {
+        if (cardItems.hasOwnProperty(key)) {
+            // console.log(`➖Віднімаємо ${cardItems[key]} від ${key} (${allIngredients2[key]})`);
+            allIngredients2[key] -= cardItems[key];
+        }
+    }
+
+    console.log("✅ Оновлені allIngredients2:", allIngredients2);
+    localStorage.setItem('allIngredients', JSON.stringify(allIngredients2));
+    updateAllMyIngrid(allIngredients2);
+    return allIngredients2;
 }
 
-	updateAllMyIngrid(allIngredients);
-	return allIngredients;
-}
+
+
 
 const addItemsBtn = document.getElementById("AddSubtractButton");
 const addItemsDiv = document.querySelector(".addItemsDiv");
 
-addItemsBtn.addEventListener("click", () => {
-	addItemsDiv.classList.toggle("hide");
-});
+// addItemsBtn.addEventListener("click", () => {
+	// addItemsDiv.classList.toggle("hide");
+// });
 
-  function getAllMyIngrid() {
-    return JSON.parse(localStorage.getItem("AllMyIngrid")) || {};
-  }
 
   function updateIngredients(newData) {
     localStorage.setItem("AllMyIngrid", JSON.stringify(newData));
@@ -1002,64 +987,146 @@ addItemsBtn.addEventListener("click", () => {
     });
   }
 
-  // Додаємо новий інгредієнт
-  document.getElementById("addIngredient").addEventListener("click", () => {
-    const newKey = document.getElementById("newKey").value.trim();
-    const newValue = parseInt(document.getElementById("newValue").value, 10) || 0;
 
-    if (newKey && !getAllMyIngrid()[newKey]) {
-      const updatedIngredients = getAllMyIngrid();
-      updatedIngredients[newKey] = newValue;
-      updateIngredients(updatedIngredients);
-      document.getElementById("newKey").value = "";
-      document.getElementById("newValue").value = "";
-    }
-  });
 
-  // Викликаємо рендер при завантаженні сторінки
-  renderIngredients();
+	// document.getElementById("btnShowCount").addEventListener("click", () => {
+	// renderTable();
+	// });
 
+/////////////////////////////////////////////////////////////////////
+
+// Отримуємо елементи
+const modal = document.getElementById("modal");
+const btnShowCount = document.getElementById("btnShowCount");
+const spanClose = document.querySelector(".close");
+const addNewIngredientBtn = document.getElementById("addNewIngredient");
+const newIngredientInput = document.getElementById("newIngredient");
+const newAmountInput = document.getElementById("newAmount");
+const ShowTable = document.querySelector(".ShowTable");
+
+
+// Функція для показу модального вікна
+btnShowCount.addEventListener("click", () => {
+  modal.style.display = "block"; // Відкриваємо модальне вікно
+  renderTable(); // Рендеримо таблицю інгредієнтів
+});
+
+// Функція для закриття модального вікна
+spanClose.addEventListener("click", () => {
+  modal.style.display = "none"; // Закриваємо модальне вікно
+});
+
+// Закрити модальне вікно при натисканні на будь-яке місце поза ним
+window.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    modal.style.display = "none"; // Закрити модальне вікно
+  }
+});
+
+// Функція для рендеру таблиці інгредієнтів
 function renderTable() {
-  const ShowTable = document.querySelector(".ShowTable");
-  const ingredients = getAllMyIngrid();
-  ShowTable.classList.toggle("hide");
-  // Сортуємо значення від меншого до більшого
-  const sortedEntries = Object.entries(ingredients).sort((a, b) => a[1] - b[1]);
+  ShowTable.innerHTML = ""; // Очищаємо таблицю перед рендером
+
+  // Сортуємо інгредієнти від меншого до більшого
+  const sortedIngredients = Object.entries(allIngredients2).sort((a, b) => a[1] - b[1]);
 
   let tableHTML = `
-    <table class="ShowTableTable">
+    <table id="ingredientTable">
       <tr>
-        <th>В наявності</th>
-        <th></th>
+        <th>Інгредієнт</th>
+        <th>Залишок</th>
+        <th>Оновити</th>
+        <th>Видалити</th>
       </tr>
   `;
 
-  sortedEntries.forEach(([key, value]) => {
-    let color;
-    if (value < 400) {
-      color = `rgba(242, 0, 0, 0.55)`;
-    } else if (value < 600) {
-      color = `rgba(255, 157, 0, 0.45)`;
+  sortedIngredients.forEach(([key, value]) => {
+    let rowClass = '';
+    if (value < 500) {
+      rowClass = 'low';
+    } else if (value < 1000) {
+      rowClass = 'medium';
     } else {
-      color = "green";
+      rowClass = 'high';
     }
 
     tableHTML += `
-      <tr style="background-color: ${color}; color: white;">
+      <tr class="${rowClass}">
         <td>${key}</td>
         <td>${value >= 1000 ? (value / 1000) + " кг" : value + " г"}</td>
+        <td>
+          <input type="number" data-key="${key}" value="0">
+          <button class="update" data-key="${key}"> ✔ </button>
+        </td>
+        <td><button class="remove" data-key="${key}"> X </button></td>
       </tr>
     `;
   });
 
   tableHTML += `</table>`;
   ShowTable.innerHTML = tableHTML;
-  
+
+  // Додаємо події для кнопок оновлення інгредієнтів
+document.querySelectorAll(".update").forEach(button => {
+  button.addEventListener("click", (e) => {
+    const key = e.target.getAttribute("data-key");
+    const input = document.querySelector(`input[data-key="${key}"]`);
+    const changeValue = parseInt(input.value, 10) || 0;
+    
+    // Додаємо або віднімаємо значення
+    allIngredients2[key] = (allIngredients2[key] || 0) + changeValue;
+
+    updateAllMyIngrid(allIngredients2); // Оновлюємо в localStorage
+    renderTable(); // Перерисовуємо таблицю
+  });
+});
+
+document.querySelectorAll('input[type="number"]').forEach(input => {
+  input.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      const key = input.getAttribute("data-key");
+      const button = document.querySelector(`button.update[data-key="${key}"]`);
+      button.click();
+    }
+  });
+});
+
+  // Додаємо події для кнопок видалення інгредієнтів
+  document.querySelectorAll(".remove").forEach(button => {
+    button.addEventListener("click", (e) => {
+      const key = e.target.getAttribute("data-key");
+      
+      // Підтвердження видалення
+      const confirmDelete = confirm(`Ви дійсно хочете видалити інгредієнт ${key}?`);
+
+      if (confirmDelete) {
+        delete allIngredients2[key]; // Видаляємо інгредієнт
+        updateAllMyIngrid(allIngredients2); // Оновлюємо в localStorage
+        renderTable(); // Перерисовуємо таблицю
+      }
+    });
+  });
 }
 
-	document.getElementById("btnShowCount").addEventListener("click", () => {
-	renderTable();
-	});
+
+
+// Додаємо новий інгредієнт
+addNewIngredientBtn.addEventListener("click", () => {
+  const newKey = newIngredientInput.value.trim();
+  const newValue = parseInt(newAmountInput.value, 10) || 0;
+
+  if (newKey && newValue > 0) {
+    const ingredients = getAllMyIngrid();
+    ingredients[newKey] = newValue;
+    updateAllMyIngrid(ingredients); // Оновлюємо в localStorage
+    renderTable(); // Перерисовуємо таблицю
+    newIngredientInput.value = ""; // Очищаємо поле вводу
+    newAmountInput.value = ""; // Очищаємо поле вводу
+  }
+});
 
 
 
+function updateAllMyIngrid(updatedIngrid) {
+  localStorage.setItem('AllMyIngrid', JSON.stringify(updatedIngrid));
+}

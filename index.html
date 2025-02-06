@@ -15,45 +15,47 @@
 <body>
 <main>
 	<input class="SearchItem" placeholder="Введіть назву їжі."></input>
+	
 <div class="container">
 	<!-- лівий блок -->
 	<div class="items">	</div>
 	<!-- правий блок -->
 	<div class="foodOrder"> 
 		<div>
-				<div id="ordersContainer"></div>
-				<button id="saveBtn">Додати замовлення</button>
-				<button id="saveArr" class="hidden">Зберігти</button>
-
-				<div id="savedOrdersContainer"></div>
-				<div id="ordersSummary"></div>
-				<div id="summaryTable"></div>
+			<div id="ordersContainer"></div>
+			<button id="saveBtn">Додати замовлення</button>
+			<button id="saveArr" class="hidden">Зберігти</button>
+			<button id="btnShowCount">Показати залишки</button>
+			<div id="savedOrdersContainer"></div>
+			<div id="ordersSummary"></div>
+			<div id="summaryTable"></div>
 					<!-- Видаляє всю інформацю з localStorage -->
-					<button class="clearLocal">ClearAll</button>
-					
+					<!-- <button class="clearLocal">ClearAll</button> -->
 
-				
-				<div class="addingIngBlock">
-					<!-- Додати інгредієнт 1 -->
-					<button id="AddSubtractButton" > Інгрідієнти</button>
-					<div class="addItemsDiv hide" >
-						<div id="ingredientsContainer"></div>
-						<input type="text" id="newKey" placeholder="Новий інгредієнт">
-						<input type="number" id="newValue" placeholder="Кількість">
-						<button id="addIngredient">Добавити</button>
-					</div>
-					<!-- Залишки -->
-					<button id="btnShowCount"> Залишки.</button>
-					<div class="ShowTable"> </div>
-				</div>
-				
+			<div class="addingIngBlock">
+			
+
+
+<!-- Модальне вікно -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <!-- <h2>Залишки інгредієнтів</h2> -->
+    <div class="ShowTable"></div>
+    <div class="addIngredient">
+      <input type="text" id="newIngredient" placeholder="Назва інгредієнта">
+      <input type="number" id="newAmount" placeholder="Кількість">
+      <button id="addNewIngredient">Додати інгредієнт</button>
+    </div>
+  </div>
+</div>
+
 			</div>
-
+				
 		</div>
+
 	</div>
-	
-	
-	
+</div>
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>

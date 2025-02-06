@@ -96,7 +96,6 @@ h1{
 .item:hover {
 	background-color: #252525;
 	cursor: pointer;
-
 }
 .hide {
 	display: none  !important;
@@ -131,7 +130,8 @@ h1{
     bottom: 0rem;
 }
 .costItem button:hover {
-	background-color: #1EA964;
+	background-color: #0056b3;
+
 }
 
 .foodOrder {
@@ -206,6 +206,7 @@ h1{
 
 .orders-table button:hover {
   background-color: #1EA964;
+  transform: scale(1.05); /* збільшення розміру кнопки */
 }
 /* Списки в додатках */
 .orders-table ul {
@@ -290,6 +291,7 @@ h1{
 
 .show-table button:hover {
   background-color: #1EA964;
+  transform: scale(1.05); /* збільшення розміру кнопки */
 }
 
 /* Списки в додатках */
@@ -327,6 +329,7 @@ h1{
 }
 .table:hover {
 	background-color: rgba(0, 85, 130, 1);
+	transform: scale(1.05); /* збільшення розміру кнопки */
 }
 caption{
 	font-weight: bold;
@@ -361,7 +364,8 @@ td {
 	transition: background-color 0.5s ease, width 1s ease-in-out;
 }
 #saveBtn:hover, #saveArr:hover {
-	background-color: green;
+	background-color: #0056b3;
+	transform: scale(1.05); /* збільшення розміру кнопки */
 }
 
 .ingredient-item {
@@ -456,10 +460,6 @@ td {
     color: red;
 }
 
-
-
-
-
 @media (max-width: 768px) {
   .container {
     flex-direction: column; /* Розміщує один під одним */
@@ -470,4 +470,247 @@ td {
     height: 50vh; /* Займають 50% висоти */
   }
 }	
-	
+
+
+	/* Модальне вікно */
+.modal {
+  display: none; /* Сховати за замовчуванням */
+  position: fixed;
+  z-index: 1; /* Високий пріоритет */
+  left: 0;
+  top: 0;
+  width: 100%; /* Ширина екрану */
+  height: 100%; /* Висота екрану */
+  overflow: auto; /* Прокручування */
+  background-color: rgb(0, 0, 0); /* Чорний фон */
+  background-color: rgba(0, 0, 0, 0.4); /* Напівпрозорий фон */
+}
+
+/* Модальний вміст */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Можна змінювати */
+}
+
+/* Закрити кнопку */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  transform: scale(1.05); /* збільшення розміру кнопки */
+}
+#modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+#ingredientTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 0.5fr; /* Колонки для Інгредієнта, Залишку, Оновлення, Видалення */
+  gap: 5px;
+}
+
+#ingredientTable thead {
+  display: contents; /* Робимо так, щоб заголовки працювали в Grid */
+}
+
+#ingredientTable tbody {
+  display: contents;
+}
+
+#ingredientTable tr {
+  display: contents;
+}
+
+#ingredientTable th,
+#ingredientTable td {
+	color: black;
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center; /* Вирівнюємо по вертикалі */
+}
+
+#ingredientTable th {
+  background-color: #333;
+  color: white;
+  font-weight: bold;
+}
+
+#ingredientTable td:nth-child(1) { /* Інгредієнт */
+  justify-content: flex-start;
+}
+
+#ingredientTable td:nth-child(2) { /* Залишок */
+  font-weight: bold;
+}
+
+#ingredientTable td:nth-child(3) { /* Оновити */
+  justify-content: flex-end;
+}
+
+#ingredientTable td:nth-child(4) { /* Видалити */
+  justify-content: center;
+}
+
+#ingredientTable input {
+  width: 80px;
+  padding: 5px;
+  text-align: right;
+}
+
+/* Видалення вирівняно праворуч */
+#ingredientTable .remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: red;
+}
+
+.low td {
+  background-color: rgba(255, 0, 0, 0.3); /* Червоний для значень < 500 */
+  color: black;
+}
+
+.medium td {
+  background-color: rgba(255, 165, 0, 0.3); /* Оранжевий для значень < 1000 */
+  color: black;
+}
+
+.high td {
+  background-color: rgba(0, 128, 0, 0.3); /* Зелений для значень ≥ 1000 */
+  color: black;
+}
+
+
+/* Робимо таблицю адаптивною */
+@media screen and (max-width: 600px) {
+  #ingredientTable {
+    grid-template-columns: 1.5fr 1fr 1fr 0.5fr;
+    font-size: 14px;
+  }
+  
+  #ingredientTable input {
+    width: 60px;
+  }
+  
+  .modal-content {
+    width: 95%;
+    padding: 15px;
+  }
+}
+.addIngredient {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  width: 300px;
+  margin: 20px auto;
+}
+
+.addIngredient input {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.addIngredient input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.addIngredient button {
+  padding: 10px;
+  font-size: 16px;
+  color: white;
+  background-color: #394e6a;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.addIngredient button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05); /* збільшення розміру кнопки */
+}
+
+.addIngredient button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+#btnShowCount {
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: #394e6a; /* зелений фон */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* тінь */
+}
+
+#btnShowCount:hover {
+  background-color: #218838; /* темніший зелений при наведенні */
+  transform: scale(1.05); /* збільшення розміру кнопки */
+}
+
+#btnShowCount:focus {
+  outline: none;
+  border: 2px solid #007bff; /* синя рамка при фокусі */
+}
+
+#btnShowCount:active {
+  background-color: #394e6a; /* ще темніший зелений при натисканні */
+  transform: scale(1);
+}
