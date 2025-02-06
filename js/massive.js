@@ -10,7 +10,7 @@
 		{ name: "Тофу", weightL: 40,weightM: 80},
 		{ name: "Соєві стейки", weightL: 35, weightM: 70},
 		{ name: "Морква", weightL: 15, weightM: 30},
-		{ name: "кабачок", weightL: 20, weightM: 40}
+		{ name: "Кабачок", weightL: 20, weightM: 40}
 	],
 
 	ingerL: {
@@ -18,14 +18,14 @@
 		"Тофу": 40,
 		"Соєві стейки": 35,
 		"Морква": 15,
-		"кабачок": 20,
+		"Кабачок": 20,
 	},
 	ingerM: {
 		"Локшина Удон": 200,
 		"Тофу": 80,
 		"Соєві стейки": 70,
 		"Морква": 30,
-		"кабачок": 40,
+		"Кабачок": 40,
 	},
 	cost: {
 		little: 170,
@@ -50,14 +50,14 @@
 		"Тофу": 40,
 		"Соєві стейки": 35,
 		"Морква": 15,
-		"кабачок": 20,
+		"Кабачок": 20,
 	},
 	ingerM: {
 		"Локшина Рисова": 200,
 		"Тофу": 80,
 		"Соєві стейки": 70,
 		"Морква": 30,
-		"кабачок": 40,
+		"Кабачок": 40,
 	},
 	cost: {
 		little: 170,
@@ -82,14 +82,14 @@
 		"Тофу": 40,
 		"Соєві стейки": 35,
 		"Морква": 15,
-		"кабачок": 20,
+		"Кабачок": 20,
 	},
 	ingerM: {
 		"Рис Басматі": 200,
 		"Тофу": 80,
 		"Соєві стейки": 70,
 		"Морква": 30,
-		"кабачок": 40,
+		"Кабачок": 40,
 	},
 	cost: {
 		little: 170,
@@ -113,14 +113,14 @@
 		"Тофу": 40,
 		"Соєві стейки": 35,
 		"Морква": 15,
-		"кабачок": 20,
+		"Кабачок": 20,
 	},
 	ingerM: {
 		"Рис Басматі": 200,
 		"Тофу": 80,
 		"Соєві стейки": 70,
 		"Морква": 30,
-		"кабачок": 40,
+		"Кабачок": 40,
 	},
 	cost: {
 		little: 170,
@@ -197,592 +197,637 @@
 	// Функція додавання до замовлення
 	const totalIngredients = {}; // Об'єкт для збереження загальної кількості інгредієнтів
 		
-	
-let orders = {}; // Поточне замовлення
-let orderArray = JSON.parse(localStorage.getItem("OrderArray")) || []; // Завантажуємо OrderArray з localStorage або ініціалізуємо порожній масив
-
-// Збереження поточного замовлення
-document.getElementById("saveBtn").addEventListener("click", () => {
-    if (Object.keys(orders).length === 0) {
-        alert("Ви ще нічого не вибрали!");
-        return;
-    }
-	document.getElementById("saveArr").classList.toggle("hidden");
-	document.getElementById("saveBtn").classList.toggle("hidden");
-	
-    renderOrdersTable();
-});
-
-// Функція генерації унікального OrdersId
-function generateOrderId() {
-    const date = new Date();
-    return `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, "0")}${date.getDate().toString().padStart(2, "0")}_${date.getHours().toString().padStart(2, "0")}${date.getMinutes().toString().padStart(2, "0")}`;
-}
-
-function addOrder(name, size, cost, ingredients, dataName) {
-    const fullName = `${name} ${size}`;
-    const order = orders[fullName];
-
-    // Якщо замовлення ще не існує
-    if (!order) {
-        orders[fullName] = {
-            count: 1,
-            cost: cost,
-            ingredients: { ...ingredients }, // Копія об'єкта інгредієнтів
-            dataName,
-            extras: {} // Додаткові інгредієнти
-        };
-
-        // Оновлення totalIngredients
-        Object.keys(ingredients).forEach(key => {
-            totalIngredients[key] = (totalIngredients[key] || 0) + ingredients[key];
-        });
-    } else {
-        // Якщо замовлення вже існує
-        order.count++;
-        order.cost += cost;
-
-        // Сумуємо інгредієнти
-        Object.keys(ingredients).forEach(key => {
-            order.ingredients[key] = (order.ingredients[key] || 0) + ingredients[key];
-        });
-
-        // Оновлення totalIngredients з урахуванням кількості порцій
-        Object.keys(ingredients).forEach(key => {
-            totalIngredients[key] = (totalIngredients[key] || 0) + ingredients[key]; // додаємо інгредієнти на 1 порцію
-        });
-    }
-
-    // console.log("Оновлений totalIngredients:", totalIngredients);
-
-    // Оновлюємо таблицю
-    renderOrdersTable();
-}
-
-// Функція для оновлення загальних інгредієнтів
-// function updateTotalIngredients(ingredients, factor) {
-    // Object.entries(ingredients).forEach(([ingredient, amount]) => {
-        // totalIngredients[ingredient] = (totalIngredients[ingredient] || 0) + amount * factor;
-
-        // Якщо значення стало 0 або менше - видаляємо ключ
-        // if (totalIngredients[ingredient] <= 0) {
-            // delete totalIngredients[ingredient];
-        // }
-    // });
-// }
-
-// Функція додавання додаткових інгредієнтів
-function addExtra(orderName, extraName, extraAmount, extraCost) {
-    if (!orders[orderName].extras[extraName]) {
-        orders[orderName].extras[extraName] = { amount: 0, cost: 0 };
-    }
-
-    orders[orderName].extras[extraName].amount += extraAmount;
-    orders[orderName].extras[extraName].cost += extraCost;
-    orders[orderName].cost += extraCost;
-
-    renderOrdersTable(); // Оновлюємо таблицю
-}
-
-// Функція видалення додатків
-function removeExtra(orderName, extraName) {
-    if (orders[orderName].extras[extraName]) {
-        orders[orderName].cost -= orders[orderName].extras[extraName].cost; // Віднімаємо вартість
-        delete orders[orderName].extras[extraName];
-    }
-
-    renderOrdersTable(); // Оновлюємо таблицю
-}
-
-// Функція видалення замовлення
-// function removeOrder(orderName) {
-    // delete orders[orderName];
-    // renderOrdersTable(); // Оновлюємо таблицю
-// }
-
-let hiddenOrders = JSON.parse(localStorage.getItem("hiddenOrders")) || []; // Завантажуємо масив прихованих замовлень з localStorage
-
-document.getElementById("saveArr").addEventListener("click", () => {
-    if (Object.keys(orders).length === 0) {
-        alert("Немає замовлень для збереження!");
-        return;
-    }
-
-    const orderId = generateOrderId();
-
-    const orderWithTime = {
-        orderId: orderId,
-        orderDetails: orders,
-        ingredientsTotal: { ...totalIngredients }, // Копіюємо для збереження
-        createdAt: new Date().toISOString()
-    };
-
-    // Оновлення масиву замовлень
-    // orderArray.push(orderWithTime);
-  
-    try {
-        // localStorage.setItem("OrderArray", JSON.stringify(orderArray)); // Зберігаємо у localStorage
-        // 🔹 Якщо localStorage оновився без помилок, віднімаємо інгредієнти
-		subtractIngredients(totalIngredients);
-    } catch (error) {
-        console.error("Помилка при збереженні в localStorage:", error);
-    }
-
-    // Показати приховані кнопки
-    document.querySelectorAll(".btn1, .btn2").forEach(btn => btn.classList.remove("hide"));
-
-    // Очищення поточних замовлень
-    orders = {};
-    Object.keys(totalIngredients).forEach(key => delete totalIngredients[key]);
-
-    // Перечитати orderArray з localStorage перед оновленням таблиці
-    orderArray = JSON.parse(localStorage.getItem("OrderArray")) || [];
-
-    // Оновити таблицю
-    renderOrdersTable();
-    displayOrdersSummary();
-
-    // Оновити підсумок замовлень
-    groupOrders();  
-
-    // Сховати кнопки збереження
-    document.getElementById("saveArr").classList.toggle("hidden");
-    document.getElementById("saveBtn").classList.toggle("hidden");
-
-    // Оновлюємо масив прихованих замовлень в localStorage
-    localStorage.setItem("hiddenOrders", JSON.stringify(hiddenOrders));
-});
-
-
-
-
-// Функція виводу таблиці
-function renderOrdersTable() {
-    const tableContainer = document.getElementById("ordersContainer");
-    tableContainer.innerHTML = ""; // Очищаємо перед оновленням
-
-    if (Object.keys(orders).length === 0) {
-        tableContainer.innerHTML = "<p>Немає активних замовлень</p>";
-        return;
-    }
-
-    let totalCost = 0; // Загальна сума всіх замовлень
-    const table = document.createElement("table");
-    table.classList.add("orders-table");
-
-    table.innerHTML = `
-        <thead>
-            <tr>
-                <th class="col-number">№</th>
-                <th class="col-name">Назва</th>
-                <th class="col-name"> Кількість</th>
-                <th class="col-price">Загальна вартість</th>
-                <th class="col-additions">Додатки</th>
-
-            </tr>
-        </thead>
-        <tbody>
-            ${Object.entries(orders)
-                .map(([fullName, order], index) => {
-                    totalCost += order.cost; // Додаємо вартість до загальної суми
-
-                    return `
-                <tr class="header-row">
-                    <td class="col-number">${index + 1}</td>
-                    <td class="col-name">
-                        ${fullName} 
-                    </td>
-					<td>
-						<button class="quantity-minus" data-name="${order.dataName}">-</button> 
-                        x<span id="count-${fullName}">${order.count}</span> 
-                        <button class="quantity-plus" data-name="${order.dataName}">+</button>
-					</td>
-                    <td class="col-price">
-                        <span id="cost-${order.dataName}">${order.cost}</span> грн
-                    </td>
-                    <td class="col-additions">
-                        <button class="add-extra" data-name="${order.dataName}">Додати</button>
-                        <ul>
-                            ${Object.entries(order.extras)
-                                .map(
-                                    ([extraName, extra]) => `
-                                    <li>${extraName}: ${extra.amount}г (+${extra.cost} грн)
-                                        <button class="remove-extra" data-name="${fullName}" data-extra="${extraName}">❌</button>
-                                    </li>
-                                `
-                                )
-                                .join("")}
-                        </ul>
-                    </td>
-
-                </tr>
-                `;
-                })
-                .join("")}
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="2"><strong>Загальна сума:</strong></td>
-                <td colspan="3"><strong id="total-cost">${totalCost} грн</strong></td>
-            </tr>
-        </tfoot>
-    `;
-
-    tableContainer.appendChild(table);
-
-	
-	
-	
-// Додавання слухачів подій для кнопок quantity-plus
-document.querySelectorAll(".quantity-plus").forEach(button => {
-    button.addEventListener("click", () => {
-        const dataName = button.getAttribute("data-name");
-        const matchingOrders = Object.entries(orders).filter(([_, order]) => order.dataName === dataName);
-
-        if (matchingOrders.length > 0) {
-            matchingOrders.forEach(([orderKey, order]) => {
-                // Збільшуємо кількість
-                order.count++;
-
-                // Оновлюємо вартість
-                order.cost += order.cost / (order.count - 1);
-
-                // Оновлюємо загальні інгредієнти
-                Object.keys(order.ingredients).forEach(key => {
-                    totalIngredients[key] = (totalIngredients[key] || 0) + order.ingredients[key];
-                });
-
-                console.log(`➕ Додано 1 порцію для ${orderKey}, нова кількість: ${order.count}`);
-            });
-
-            console.log("Оновлений totalIngredients:", totalIngredients);
-            renderOrdersTable(); // Оновлюємо таблицю
-        }
-    });
-});
-  // Додавання слухачів подій для кнопок quantity-minus
-// Додавання слухачів подій для кнопок quantity-minus
-document.querySelectorAll(".quantity-minus").forEach(button => {
-    button.addEventListener("click", () => {
-        const dataName = button.getAttribute("data-name");
-        const matchingOrders = Object.entries(orders).filter(([_, order]) => order.dataName === dataName);
-
-        if (matchingOrders.length > 0) {
-            matchingOrders.forEach(([orderKey, order]) => {
-                if (order.count > 0) {
-                    const portionIngredients = order.ingredients;
-
-                    // Віднімаємо інгредієнти для однієї порції
-                    Object.keys(portionIngredients).forEach(ingredient => {
-                        if (totalIngredients[ingredient]) {
-                            totalIngredients[ingredient] -= portionIngredients[ingredient];
-                            if (totalIngredients[ingredient] < 0) totalIngredients[ingredient] = 0;
-                        }
-                    });
-
-                    // Зменшуємо count на 1
-                    order.count--;
-
-                    // Віднімаємо рівну частину вартості
-                    order.cost -= order.cost / (order.count + 1);
-
-                    console.log(`➖ Віднято 1 порцію ${orderKey}, залишилося: ${order.count}`);
-                }
-            });
-
-            console.log("Оновлений totalIngredients:", totalIngredients);
-
-            // Видаляємо замовлення, якщо count = 0
-            for (const [orderKey, order] of matchingOrders) {
-                if (order.count === 0) {
-                    delete orders[orderKey];
-                    console.log(`❌ Видалено ${orderKey} з orders`);
-                }
-            }
-
-            // Відображаємо кнопки btn1 та btn2, якщо всі замовлення видалені
-            if (Object.values(orders).every(order => order.dataName !== dataName)) {
-                const btn1 = document.querySelector(`.btn1[data-name="${dataName}"]`);
-                const btn2 = document.querySelector(`.btn2[data-name="${dataName}"]`);
-
-                if (btn1) btn1.classList.remove("hide");
-                if (btn2) btn2.classList.remove("hide");
-            }
-
-            renderOrdersTable(); // Оновлюємо таблицю
-        }
-    });
-});
-}
-
-// Виклик функцій
-firstBtn(foodItems);
-secondBtn(foodItems);
-
-
-// Функція для кнопок першого типу
-function firstBtn(arr) {
-    document.querySelectorAll(".btn1").forEach((button, index) => {
-        button.addEventListener("click", () => {
-            const { name, cost, ingerL } = arr[index];
-            const dataName = button.getAttribute("data-name");
-			console.log(dataName);
-            if (!name || !cost || !ingerL || !dataName) {
-                console.error("Невірні дані для кнопки першого типу");
-                return;
-            }
-            // Додаємо новий елемент або збільшуємо кількість
-            addOrder(name, "L", cost.little, ingerL, dataName);
-            renderOrdersTable(); // Оновлюємо таблицю після всіх змін
-
-            // Додаємо клас hide на кнопку, щоб приховати її
-            button.classList.add("hide");
-        });
-    });
-}
-
-// Функція для кнопок другого типу
-function secondBtn(arr) {
-    document.querySelectorAll(".btn2").forEach((button, index) => {
-        button.addEventListener("click", () => {
-            const { name, cost, ingerM } = arr[index];
-            const dataName = button.getAttribute("data-name");
-
-            if (!name || !cost || !ingerM || !dataName) {
-                console.error("Невірні дані для кнопки другого типу");
-                return;
-            }
-
-            // Додаємо новий елемент або збільшуємо кількість
-            addOrder(name, "M", cost.max, ingerM, dataName);
-            renderOrdersTable(); // Оновлюємо таблицю після всіх змін
-			
-			// Додаємо клас hide на кнопку, щоб приховати її
-            button.classList.add("hide");
-        });
-    });
-}
-
-
-
-function displayOrdersSummary() {
-    const ordersContainer = document.getElementById("ordersSummary");
-    ordersContainer.innerHTML = ""; // Очищаємо попередній вивід
-
-    if (orderArray.length === 0) {
-        ordersContainer.innerHTML = "<p>Немає збережених замовлень</p>";
-        return;
-    }
-
-    const table = document.createElement("table");
-    table.classList.add("show-table");
-
-    const thead = document.createElement("thead");
-    thead.classList.add("show");
-    thead.innerHTML = `
-        <tr>
-            <th class="col-number">№</th>
-            <th class="col-name">Назва</th>
-            <th class="col-name">Кількість</th>
-            <th class="col-price">Загальна вартість</th>
-            <th class="col-price">Виконано</th>
-            <th class="col-additions">Час створення</th>
-        </tr>
-    `;
-
-    table.appendChild(thead);
-
-    const tbody = document.createElement("tbody");
-
-    orderArray.forEach((order, index) => {
-        const orderDetails = order.orderDetails;
-        let totalCost = 0;
-        let allExtras = {};
-
-        Object.values(orderDetails).forEach(orderItem => {
-            totalCost += orderItem.cost;
-            // Підсумовуємо додаткові інгредієнти
-            Object.entries(orderItem.extras).forEach(([extra, extraData]) => {
-                allExtras[extra] = (allExtras[extra] || 0) + extraData.amount;
-            });
-        });
-
-        const orderString = Object.entries(orderDetails)
-            .map(([name, details]) => `${name} x${details.count}`)
-            .join(", ");
-
-        const ingredientsString = Object.entries(order.ingredientsTotal || {})
-            .map(([key, value]) => `${key}: ${value}`)
-            .join(", ");
-
-        const extrasString = Object.entries(allExtras)
-            .map(([key, value]) => `${key}: ${value}г`)
-            .join(", ");
-
-        // Створюємо рядок таблиці
-        const orderTr = document.createElement("tr");
-        orderTr.classList.add("header-row");
-        orderTr.innerHTML = `
-            <td class="col-number">№${index + 1}</td>
-            <td class="col-name">${orderString}</td>
-            <td class="col-name"><p>${ingredientsString}</p></td>
-            <td class="col-price">${totalCost}</td>
-            <td class="col-price">
-                <button class="done" data-id="${index + 1}">&#10004;</button>
-            </td>
-            <td class="col-additions">
-                <p>${new Date(order.createdAt).toISOString().slice(0, 19).replace("T", " ")}</p>
-            </td>
-        `;
-
-        // Додаємо логіку для приховування кнопок
-        if (hiddenOrders.includes(index + 1)) {
-            orderTr.classList.add("hide");
-        }
-
-        tbody.appendChild(orderTr);
-    });
-
-    table.appendChild(tbody);
-    ordersContainer.appendChild(table);
-
-    const tfoot = document.createElement("tfoot");
-    tfoot.id = "orderSummaryRow"; 
-    table.appendChild(tfoot);
-
-
-}
-
-function groupOrders() {
-    let orderSummary = {}; // Підсумкове збереження
-
-    // Отримуємо всі видимі замовлення з таблиці show-table
-    document.querySelectorAll(".show-table tr:not(.hide) .col-name").forEach(cell => {
-        let orderText = cell.textContent.trim();
-
-        // Розбиваємо текст на окремі інгредієнти (name x кількість) за допомогою розділення по комі
-        let items = orderText.split(",").map(item => item.trim()); // Окремі інгредієнти
-        items.forEach(item => {
-            let matches = item.match(/(.+?)\s*x(\d+)/);
-
-            if (matches) {
-                let name = matches[1].trim();
-                let count = parseInt(matches[2]);
-
-                // Якщо цей інгредієнт вже є в підсумку, додаємо кількість, якщо ні — ініціалізуємо
-                if (orderSummary[name]) {
-                    orderSummary[name] += count;
-                } else {
-                    orderSummary[name] = count;
-                }
-            }
-        });
-    });
-
-    // Перетворюємо підсумкові дані у рядок
-    let summaryString = Object.entries(orderSummary)
-        .map(([name, count]) => {
-            // Підсвічуємо за допомогою класів
-            let className = "";
-            if (count >= 5) {
-                className = "high-count"; // Для x5 і більше
-            } else if (count >= 2) {
-                className = "medium-count"; // Для x2 до x4
-            }else if (count >= 0) {
-				className = "low-count"; // Для x0 до x2
+		
+	let orders = {}; // Поточне замовлення
+	let orderArray = JSON.parse(localStorage.getItem("OrderArray")) || []; // Завантажуємо OrderArray з localStorage або ініціалізуємо порожній масив
+
+	// Збереження поточного замовлення
+	document.getElementById("saveBtn").addEventListener("click", () => {
+		if (Object.keys(orders).length === 0) {
+			alert("Ви ще нічого не вибрали!");
+			return;
+		}
+		document.getElementById("saveArr").classList.toggle("hidden");
+		document.getElementById("saveBtn").classList.toggle("hidden");
+		
+		renderOrdersTable();
+	});
+
+	// Функція генерації унікального OrdersId
+	function generateOrderId() {
+		const date = new Date();
+		return `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, "0")}${date.getDate().toString().padStart(2, "0")}_${date.getHours().toString().padStart(2, "0")}${date.getMinutes().toString().padStart(2, "0")}`;
+	}
+
+	function addOrder(name, size, cost, ingredients, dataName) {
+		const fullName = `${name} ${size}`;
+		const order = orders[fullName];
+
+		// Якщо замовлення ще не існує
+		if (!order) {
+			orders[fullName] = {
+				count: 1,
+				cost: cost,
+				ingredients: { ...ingredients }, // Копія об'єкта інгредієнтів
+				dataName,
+				extras: {} // Додаткові інгредієнти
+			};
+
+			// Оновлення totalIngredients
+			Object.keys(ingredients).forEach(key => {
+				totalIngredients[key] = (totalIngredients[key] || 0) + ingredients[key];
+			});
+		} else {
+			// Якщо замовлення вже існує
+			order.count++;
+			order.cost += cost;
+
+			// Сумуємо інгредієнти
+			Object.keys(ingredients).forEach(key => {
+				order.ingredients[key] = (order.ingredients[key] || 0) + ingredients[key];
+			});
+
+			// Оновлення totalIngredients з урахуванням кількості порцій
+			Object.keys(ingredients).forEach(key => {
+				totalIngredients[key] = (totalIngredients[key] || 0) + ingredients[key]; // додаємо інгредієнти на 1 порцію
+			});
+		}
+
+		// console.log("Оновлений totalIngredients:", totalIngredients);
+
+		// Оновлюємо таблицю
+		renderOrdersTable();
+	}
+
+	// Функція додавання додаткових інгредієнтів
+	function addExtra(orderName, extraName, extraAmount, extraCost) {
+		if (!orders[orderName].extras[extraName]) {
+			orders[orderName].extras[extraName] = { amount: 0, cost: 0 };
+		}
+
+		orders[orderName].extras[extraName].amount += extraAmount;
+		orders[orderName].extras[extraName].cost += extraCost;
+		orders[orderName].cost += extraCost;
+
+		renderOrdersTable(); // Оновлюємо таблицю
+	}
+
+	// Функція видалення додатків
+	function removeExtra(orderName, extraName) {
+		if (orders[orderName].extras[extraName]) {
+			orders[orderName].cost -= orders[orderName].extras[extraName].cost; // Віднімаємо вартість
+			delete orders[orderName].extras[extraName];
+		}
+
+		renderOrdersTable(); // Оновлюємо таблицю
+	}
+
+	let hiddenOrders = JSON.parse(localStorage.getItem("hiddenOrders")) || []; // Завантажуємо масив прихованих замовлень з localStorage
+
+	document.getElementById("saveArr").addEventListener("click", () => {
+		if (Object.keys(orders).length === 0) {
+			alert("Немає замовлень для збереження!");
+			return;
+		}
+
+		const orderId = generateOrderId();
+
+		const orderWithTime = {
+			orderId: orderId,
+			orderDetails: orders,
+			ingredientsTotal: { ...totalIngredients }, // Копіюємо для збереження
+			createdAt: new Date().toISOString()
+		};
+
+		// Оновлення масиву замовлень
+		orderArray.push(orderWithTime);
+	  
+		try {
+			subtractIngredients(totalIngredients);
+			localStorage.setItem("OrderArray", JSON.stringify(orderArray)); // Зберігаємо у localStorage
+			// 🔹 Якщо localStorage оновився без помилок, віднімаємо інгредієнти
+		} catch (error) {
+			console.error("Помилка при збереженні в localStorage:", error);
+		}
+
+		// Показати приховані кнопки
+		document.querySelectorAll(".btn1, .btn2").forEach(btn => btn.classList.remove("hide"));
+
+		// Очищення поточних замовлень
+		orders = {};
+		Object.keys(totalIngredients).forEach(key => delete totalIngredients[key]);
+
+		// Перечитати orderArray з localStorage перед оновленням таблиці
+		orderArray = JSON.parse(localStorage.getItem("OrderArray")) || [];
+
+		// Оновити таблицю
+		renderOrdersTable();
+		displayOrdersSummary();
+
+		// Оновити підсумок замовлень
+		groupOrders();  
+
+		// Сховати кнопки збереження
+		document.getElementById("saveArr").classList.toggle("hidden");
+		document.getElementById("saveBtn").classList.toggle("hidden");
+
+		// Оновлюємо масив прихованих замовлень в localStorage
+		localStorage.setItem("hiddenOrders", JSON.stringify(hiddenOrders));
+	});
+
+	const extraItems = {
+		"Тофу": { name: "Тофу", amount: 40, cost: 35 },
+		"Соєві стейки": { name: "Соєві стейки", amount: 40, cost: 35 },
+		"Шіїтаке": { name: "Шіїтаке", amount: 40, cost: 35 }
+	};
+
+	// Функція виводу таблиці
+	function renderOrdersTable() {
+		const tableContainer = document.getElementById("ordersContainer");
+		tableContainer.innerHTML = ""; // Очищаємо перед оновленням
+
+		if (Object.keys(orders).length === 0) {
+			tableContainer.innerHTML = "<p>Немає активних замовлень</p>";
+			return;
+		}
+
+		let totalCost = 0; // Загальна сума всіх замовлень
+		const table = document.createElement("table");
+		table.classList.add("orders-table");
+
+		table.innerHTML = `
+			<thead>
+				<tr>
+					<th class="col-number">№</th>
+					<th class="col-name">Назва</th>
+					<th class="col-name">Кількість</th>
+					<th class="col-price">Загальна вартість</th>
+					<th class="col-additions">Додатки</th>
+				</tr>
+			</thead>
+			<tbody>
+				${Object.entries(orders)
+					.map(([fullName, order], index) => {
+						totalCost += order.cost; // Додаємо вартість до загальної суми
+
+						return `
+						<tr class="header-row">
+							<td class="col-number">${index + 1}</td>
+							<td class="col-name">${fullName}</td>
+							<td>
+								<button class="quantity-minus" data-name="${order.dataName}">-</button> 
+								x<span id="count-${fullName}">${order.count}</span> 
+								<button class="quantity-plus" data-name="${order.dataName}">+</button>
+							</td>
+							<td class="col-price">
+								<span id="cost-${order.dataName}">${order.cost}</span> грн
+							</td>
+							<td class="col-additions">
+								<select class="extra-select" data-name="${order.dataName}">
+									<option value="none">Виберіть додаток</option>
+									${Object.keys(extraItems).map(item => 
+										`<option value="${item}">${extraItems[item].name} - ${extraItems[item].amount}г (+${extraItems[item].cost} грн)</option>`
+									).join('')}
+								</select>
+								<button class="add-extra" data-name="${order.dataName}">Додати</button>
+								<ul>
+									${Object.entries(order.extras)
+										.map(
+											([extraName, extra]) => `
+											<li>${extraName}: ${extra.amount}г (+${extra.cost} грн)
+												<button class="remove-extra" data-name="${order.dataName}" data-extra="${extraName}">❌</button>
+											</li>
+										`
+										)
+										.join("")}
+								</ul>
+							</td>
+						</tr>
+						`;
+					})
+					.join("")}
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="2"><strong>Загальна сума:</strong></td>
+					<td colspan="3"><strong id="total-cost">${totalCost} грн</strong></td>
+				</tr>
+			</tfoot>
+		`;
+
+		tableContainer.appendChild(table);
+		
+		
+		
+	// Додавання слухачів подій для кнопок quantity-plus
+	document.querySelectorAll(".quantity-plus").forEach(button => {
+		button.addEventListener("click", () => {
+			const dataName = button.getAttribute("data-name");
+			const matchingOrders = Object.entries(orders).filter(([_, order]) => order.dataName === dataName);
+
+			if (matchingOrders.length > 0) {
+				matchingOrders.forEach(([orderKey, order]) => {
+					// Збільшуємо кількість
+					order.count++;
+
+					// Оновлюємо вартість
+					order.cost += order.cost / (order.count - 1);
+
+					// Оновлюємо загальні інгредієнти
+					Object.keys(order.ingredients).forEach(key => {
+						totalIngredients[key] = (totalIngredients[key] || 0) + order.ingredients[key];
+					});
+
+					console.log(`➕ Додано 1 порцію для ${orderKey}, нова кількість: ${order.count}`);
+					console.log(totalIngredients);
+				});
+
+				console.log("Оновлений totalIngredients:", totalIngredients);
+				renderOrdersTable(); // Оновлюємо таблицю
+			}
+		});
+	});
+	// Додавання слухачів подій для кнопок quantity-minus
+	document.querySelectorAll(".quantity-minus").forEach(button => {
+		button.addEventListener("click", () => {
+			const dataName = button.getAttribute("data-name");
+			const matchingOrders = Object.entries(orders).filter(([_, order]) => order.dataName === dataName);
+
+			if (matchingOrders.length > 0) {
+				matchingOrders.forEach(([orderKey, order]) => {
+					if (order.count > 0) {
+						const portionIngredients = order.ingredients;
+
+						// Віднімаємо інгредієнти для однієї порції
+						Object.keys(portionIngredients).forEach(ingredient => {
+							if (totalIngredients[ingredient]) {
+								totalIngredients[ingredient] -= portionIngredients[ingredient];
+								if (totalIngredients[ingredient] < 0) totalIngredients[ingredient] = 0;
+							}
+						});
+
+						// Зменшуємо count на 1
+						order.count--;
+
+						// Віднімаємо рівну частину вартості
+						order.cost -= order.cost / (order.count + 1);
+
+						console.log(`➖ Віднято 1 порцію ${orderKey}, залишилося: ${order.count}`);
+						console.log(totalIngredients);
+					}
+				});
+
+				console.log("Оновлений totalIngredients:", totalIngredients);
+
+				// Видаляємо замовлення, якщо count = 0
+				for (const [orderKey, order] of matchingOrders) {
+					if (order.count === 0) {
+						delete orders[orderKey];
+						console.log(`❌ Видалено ${orderKey} з orders`);
+						console.log(totalIngredients);
+					}
+				}
+
+				// Відображаємо кнопки btn1 та btn2, якщо всі замовлення видалені
+				if (Object.values(orders).every(order => order.dataName !== dataName)) {
+					const btn1 = document.querySelector(`.btn1[data-name="${dataName}"]`);
+					const btn2 = document.querySelector(`.btn2[data-name="${dataName}"]`);
+
+					if (btn1) btn1.classList.remove("hide");
+					if (btn2) btn2.classList.remove("hide");
+				}
+
+				renderOrdersTable(); // Оновлюємо таблицю
+			}
+		});
+	});
+
+	  document.querySelectorAll(".add-extra").forEach(button => {
+		button.addEventListener("click", () => {
+			const dataName = button.getAttribute("data-name");
+			const matchingOrders = Object.entries(orders).filter(([_, order]) => order.dataName === dataName);
+
+			if (matchingOrders.length > 0) {
+				matchingOrders.forEach(([orderKey, order]) => {
+					// Отримуємо вибраний інгредієнт з select
+					const selectedExtra = document.querySelector(`.extra-select[data-name="${dataName}"]`).value;
+					const extraItem = extraItems[selectedExtra];
+
+					if (selectedExtra !== "none" && extraItem) {
+						// Якщо додаток вже є в замовленні, збільшуємо його кількість і вартість
+						if (order.extras[extraItem.name]) {
+							order.extras[extraItem.name].amount += extraItem.amount; // Збільшуємо кількість
+							order.extras[extraItem.name].cost += extraItem.cost; // Збільшуємо вартість
+							order.cost += extraItem.cost; // Оновлюємо загальну вартість замовлення
+
+							// Оновлюємо totalIngredients
+							totalIngredients[extraItem.name] += extraItem.amount;
+							console.log(`Додано ще ${extraItem.amount}г ${extraItem.name} до замовлення ${orderKey}, нова вартість: ${order.cost}`);
+						} else {
+							// Якщо додаток ще не був доданий, додаємо його
+							order.extras[extraItem.name] = { amount: extraItem.amount, cost: extraItem.cost };
+							order.cost += extraItem.cost; // Оновлюємо вартість замовлення
+
+							// Оновлюємо totalIngredients
+							totalIngredients[extraItem.name] = (totalIngredients[extraItem.name] || 0) + extraItem.amount;
+							console.log(`Додано ${extraItem.amount}г ${extraItem.name} до замовлення ${orderKey}, нова вартість: ${order.cost}`);
+						}
+						console.log(totalIngredients);
+					}
+				});
+
+				renderOrdersTable(); // Оновлюємо таблицю
+			}
+		});
+	});
+
+
+	// Обробник події для кнопки "Видалити" додаток
+	document.querySelectorAll(".remove-extra").forEach(button => {
+		button.addEventListener("click", () => {
+			const orderName = button.getAttribute("data-name");
+			const extraName = button.getAttribute("data-extra");
+
+			// Знаходимо відповідне замовлення за data-name
+			const matchingOrders = Object.entries(orders).find(([_, order]) => order.dataName === orderName);
+
+			if (matchingOrders) {
+				const [orderKey, order] = matchingOrders; // Доступ до order
+
+				if (order.extras[extraName]) {
+					// Віднімаємо вартість від замовлення
+					const extra = order.extras[extraName];
+					order.cost -= extra.cost;
+
+					// Віднімаємо кількість з totalIngredients
+					if (totalIngredients[extraName]) {
+						totalIngredients[extraName] -= extra.amount;
+						if (totalIngredients[extraName] < 0) totalIngredients[extraName] = 0;
+					}
+
+					// Видаляємо додаток з об'єкта замовлення
+					delete order.extras[extraName];
+
+					console.log(`❌ Видалено додаток ${extraName} з замовлення ${orderKey}`);
+					console.log(totalIngredients);
+				}
 			}
 
-            return `<span class="${className}">${name} x${count}</span>`;
-        })
-        .join(", ");
+			// Оновлюємо таблицю після видалення
+			renderOrdersTable();
+		});
+	});
 
-    // Перевіряємо, чи вже є підсумковий рядок
-    let summaryElement = document.getElementById("orderSummaryRow");
+	}
 
-    if (!summaryElement) {
-        // Якщо немає — створюємо новий підсумковий рядок
-        summaryElement = document.createElement("div");
-        summaryElement.id = "orderSummaryRow";
-        summaryElement.classList.add("order-summary");
-        summaryElement.innerHTML = `
-            <p>📌 Підсумок: ${summaryString}</p>
-        `;
-        // Додаємо підсумок в контейнер ordersSummary
-        const ordersContainer = document.getElementById("ordersSummary");
-        ordersContainer.appendChild(summaryElement);
-    } else {
-        // Оновлюємо існуючий підсумок
-        summaryElement.innerHTML = `<p>  ${summaryString}</p>`;
-    }
-}
+	// Виклик функцій
+	firstBtn(foodItems);
+	secondBtn(foodItems);
+
+	// Функція для кнопок першого типу
+	function firstBtn(arr) {
+		document.querySelectorAll(".btn1").forEach((button, index) => {
+			button.addEventListener("click", () => {
+				const { name, cost, ingerL } = arr[index];
+				const dataName = button.getAttribute("data-name");
+				console.log(dataName);
+				if (!name || !cost || !ingerL || !dataName) {
+					console.error("Невірні дані для кнопки першого типу");
+					return;
+				}
+				// Додаємо новий елемент або збільшуємо кількість
+				addOrder(name, "L", cost.little, ingerL, dataName);
+				renderOrdersTable(); // Оновлюємо таблицю після всіх змін
+
+				// Додаємо клас hide на кнопку, щоб приховати її
+				button.classList.add("hide");
+			});
+		});
+	}
+
+	// Функція для кнопок другого типу
+	function secondBtn(arr) {
+		document.querySelectorAll(".btn2").forEach((button, index) => {
+			button.addEventListener("click", () => {
+				const { name, cost, ingerM } = arr[index];
+				const dataName = button.getAttribute("data-name");
+
+				if (!name || !cost || !ingerM || !dataName) {
+					console.error("Невірні дані для кнопки другого типу");
+					return;
+				}
+
+				// Додаємо новий елемент або збільшуємо кількість
+				addOrder(name, "M", cost.max, ingerM, dataName);
+				renderOrdersTable(); // Оновлюємо таблицю після всіх змін
+				
+				// Додаємо клас hide на кнопку, щоб приховати її
+				button.classList.add("hide");
+			});
+		});
+	}
+
+	// Вивід таблиці для опрацювання.
+	function displayOrdersSummary() {
+		const ordersContainer = document.getElementById("ordersSummary");
+		ordersContainer.innerHTML = ""; // Очищаємо попередній вивід
+
+		if (orderArray.length === 0) {
+			ordersContainer.innerHTML = "<p>Немає збережених замовлень</p>";
+			return;
+		}
+
+		const table = document.createElement("table");
+		table.classList.add("show-table");
+
+		const thead = document.createElement("thead");
+		thead.classList.add("show");
+		thead.innerHTML = `
+			<tr>
+				<th class="col-number">№</th>
+				<th class="col-name">Назва</th>
+				<th class="col-name">Додатки</th>
+				<th class="col-price">Загальна вартість</th>
+				<th class="col-name">Кількість</th>
+				<th class="col-price">Виконано</th>
+				<th class="col-additions">Час створення</th>
+			</tr>
+		`;
+
+		table.appendChild(thead);
+
+		const tbody = document.createElement("tbody");
+
+		orderArray.forEach((order, index) => {
+			const orderDetails = order.orderDetails;
+			let totalCost = 0;
+			let allExtras = {};
+
+			Object.values(orderDetails).forEach(orderItem => {
+				totalCost += orderItem.cost;
+				// Підсумовуємо додаткові інгредієнти
+			Object.entries(orderItem.extras).forEach(([extra, extraData]) => {
+					allExtras[extra] = (allExtras[extra] || 0) + extraData.amount;
+				});
+			});
+
+			const orderString = Object.entries(orderDetails)
+				.map(([name, details]) => `${name} x${details.count}`)
+				.join(", ");
+
+			const ingredientsString = Object.entries(order.ingredientsTotal || {})
+				.map(([key, value]) => `${key}: ${value}`)
+				.join(", ");
+
+			const extrasString = Object.entries(allExtras)
+				.map(([key, value]) => `${key}: ${value}г`)
+				.join(", ");
+			
+
+			const extrasDisplay = extrasString.trim() === "" ? "-" : extrasString;
+				// Створюємо рядок таблиці
+			const orderTr = document.createElement("tr");
+			orderTr.classList.add("header-row");
+			orderTr.innerHTML = `
+				<td class="col-number">№${index + 1}</td>
+				<td class="col-name">${orderString}</td>
+				<td class="col-name">${extrasDisplay}</td>
+				<td class="col-price">${totalCost}грн</td>
+				<td class="col-name"><p>${ingredientsString}</p></td>
+				<td class="col-price">
+					<button class="done" data-id="${index + 1}">&#10004;</button>
+				</td>
+				<td class="col-additions">
+					<p>${new Date(order.createdAt).toISOString().slice(0, 19).replace("T", " ")}</p>
+				</td>
+			`;
+
+			console.log("rowHTML:", orderTr);
+			// Додаємо логіку для приховування кнопок
+			if (hiddenOrders.includes(index + 1)) {
+				orderTr.classList.add("hide");
+			}
+
+			tbody.appendChild(orderTr);
+		});
+
+		table.appendChild(tbody);
+		ordersContainer.appendChild(table);
+
+		const tfoot = document.createElement("tfoot");
+		tfoot.id = "orderSummaryRow"; 
+		table.appendChild(tfoot);
 
 
+	}
 
+	// функція підсумовуваня наших замовлень
+	function groupOrders() {
+		let orderSummary = {}; // Підсумкове збереження
 
-// Отримуємо приховані ID з localStorage
-function getHiddenOrders() {
-    return JSON.parse(localStorage.getItem("hiddenOrders")) || [];
-}
+		// Отримуємо всі видимі замовлення з таблиці show-table
+		document.querySelectorAll(".show-table tr:not(.hide) .col-name").forEach(cell => {
+			let orderText = cell.textContent.trim();
 
-// Зберігаємо приховані ID в localStorage
-function saveHiddenOrders(hiddenOrders) {
-//Розібратись чому коли коментую цей блок hide елемент не пряче
-    localStorage.setItem("hiddenOrders", JSON.stringify(hiddenOrders));
-}
-    // document.addEventListener("click", (event) => {
-        // if (event.target.classList.contains("done")) {
-            // const orderId = event.target.getAttribute("data-id"); 
-            // const row = event.target.closest("tr"); // Отримуємо батьківський рядок
-            // if (row) {
-                // row.classList.add("hide"); // Додаємо клас hide для приховування
-                // if (!hiddenOrders.includes(parseInt(orderId))) {
-                    // hiddenOrders.push(parseInt(orderId)); // Додаємо ID до масиву, якщо його ще немає
-					
-                // }
-                // localStorage.setItem("hiddenOrders", JSON.stringify(hiddenOrders)); // Оновлюємо localStorage
-            // }
-        // }
-    // });
-// Приховуємо замовлення при кліку на кнопку "done"
-document.addEventListener("click", (event) => {
-    if (event.target.classList.contains("done")) {
-        const orderId = event.target.getAttribute("data-id"); // Отримуємо ID замовлення
-        const row = event.target.closest("tr"); // Знаходимо батьківський <tr>
+			// Розбиваємо текст на окремі інгредієнти (name x кількість) за допомогою розділення по комі
+			let items = orderText.split(",").map(item => item.trim()); // Окремі інгредієнти
+			items.forEach(item => {
+				let matches = item.match(/(.+?)\s*x(\d+)/);
 
-        if (row) {
-            row.classList.add("hide"); // Додаємо клас приховування
-            // let hiddenOrders = getHiddenOrders();
-            if (!hiddenOrders.includes(parseInt(orderId))) {
-                hiddenOrders.push(parseInt(orderId)); // Додаємо ID в список прихованих
-                // saveHiddenOrders(hiddenOrders); // Оновлюємо localStorage
-            }
-			localStorage.setItem("hiddenOrders", JSON.stringify(hiddenOrders)); // Оновлюємо localStorage
-            groupOrders(); // Оновлюємо підсумкову таблицю
-        }
-    }
-});
+				if (matches) {
+					let name = matches[1].trim();
+					let count = parseInt(matches[2]);
 
-// Перевіряємо приховані замовлення при завантаженні сторінки
-document.addEventListener("DOMContentLoaded", () => {
-    let hiddenOrders = getHiddenOrders();
-    hiddenOrders.forEach(orderId => {
-        const row = document.querySelector(`.done[data-id="${orderId}"]`)?.closest("tr");
-        if (row) {
-            row.classList.add("hide"); // Приховуємо елемент
-        }
-    });
-    groupOrders(); // Оновлюємо підсумкову таблицю
-});
+					// Якщо цей інгредієнт вже є в підсумку, додаємо кількість, якщо ні — ініціалізуємо
+					if (orderSummary[name]) {
+						orderSummary[name] += count;
+					} else {
+						orderSummary[name] = count;
+					}
+				}
+			});
+		});
 
+		// Перетворюємо підсумкові дані у рядок
+		let summaryString = Object.entries(orderSummary)
+			.map(([name, count]) => {
+				// Підсвічуємо за допомогою класів
+				let className = "";
+				if (count >= 5) {
+					className = "high-count"; // Для x5 і більше
+				} else if (count >= 2) {
+					className = "medium-count"; // Для x2 до x4
+				}else if (count >= 0) {
+					className = "low-count"; // Для x0 до x2
+				}
 
+				return `<span class="${className}">${name} x${count} </span>`;
+			})
+			.join(", ");
 
-// Викликаємо функцію для виведення інформації
-displayOrdersSummary();
-document.addEventListener("DOMContentLoaded", () => {
-    groupOrders();
-});
+		// Перевіряємо, чи вже є підсумковий рядок
+		let summaryElement = document.getElementById("orderSummaryRow");
 
+		if (!summaryElement) {
+			// Якщо немає — створюємо новий підсумковий рядок
+			summaryElement = document.createElement("div");
+			summaryElement.id = "orderSummaryRow";
+			summaryElement.classList.add("order-summary");
+			summaryElement.innerHTML = `
+				<p>📌 Підсумок: ${summaryString}</p>
+			`;
+			// Додаємо підсумок в контейнер ordersSummary
+			const ordersContainer = document.getElementById("ordersSummary");
+			ordersContainer.appendChild(summaryElement);
+		} else {
+			// Оновлюємо існуючий підсумок
+			summaryElement.innerHTML = `<p>  ${summaryString}</p>`;
+		}
+	}
 
+	// Отримуємо приховані ID з localStorage
+	function getHiddenOrders() {
+		return JSON.parse(localStorage.getItem("hiddenOrders")) || [];
+	}
+
+	// Зберігаємо приховані ID в localStorage
+	function saveHiddenOrders(hiddenOrders) {
+		localStorage.setItem("hiddenOrders", JSON.stringify(hiddenOrders));
+	}
+
+	// Приховуємо замовлення при кліку на кнопку "done"
+	document.addEventListener("click", (event) => {
+		if (event.target.classList.contains("done")) {
+			const orderId = event.target.getAttribute("data-id"); // Отримуємо ID замовлення
+			const row = event.target.closest("tr"); // Знаходимо батьківський <tr>
+
+			if (row) {
+				row.classList.add("hide"); // Додаємо клас приховування
+				// let hiddenOrders = getHiddenOrders();
+				if (!hiddenOrders.includes(parseInt(orderId))) {
+					hiddenOrders.push(parseInt(orderId)); // Додаємо ID в список прихованих
+					// saveHiddenOrders(hiddenOrders); // Оновлюємо localStorage
+				}
+				localStorage.setItem("hiddenOrders", JSON.stringify(hiddenOrders)); // Оновлюємо localStorage
+				groupOrders(); // Оновлюємо підсумкову таблицю
+			}
+		}
+	});
+
+	// Перевіряємо приховані замовлення при завантаженні сторінки
+	document.addEventListener("DOMContentLoaded", () => {
+		let hiddenOrders = getHiddenOrders();
+		hiddenOrders.forEach(orderId => {
+			const row = document.querySelector(`.done[data-id="${orderId}"]`)?.closest("tr");
+			if (row) {
+				row.classList.add("hide"); // Приховуємо елемент
+			}
+		});
+		groupOrders(); // Оновлюємо підсумкову таблицю
+	});
+
+	// Викликаємо функцію для виведення інформації
+	displayOrdersSummary();
 
 	// Видалити все		
 	if(cleareBtn != null){
@@ -793,95 +838,15 @@ document.addEventListener("DOMContentLoaded", () => {
 	});	
 	}
 
-	
-// document.getElementById('AddSubtractButton').addEventListener('click', function() {
-    // document.querySelector('.addingIngBlock').classList.add('showModal');
-// });
 
-// document.getElementById('btnShowCount').addEventListener('click', function() {
-    // document.querySelector('.addingIngBlock').classList.add('showModal');
-// });
-	
-	// document.querySelector('.addingIngBlock').addEventListener('click', function(e) {
-  // if (e.target === this) {
-    // this.classList.remove('showModal');
-  // }
-// });
-	
-	
-	
-	//Таблиця додавання Ігрідієнтів orderPanel
-	// function renderTablesFromArray(array) {
-	// const container = document.getElementById('tableContainer');
-	// container.innerHTML = ""; // Очищуємо контейнер перед рендерингом нових таблиц
-	
-	// array.forEach((innerArray, index) => {
-		// console.log(innerArray);
-		// const table = document.createElement('table');
-		// table.classList.add("table");
-		// const btn = document.createElement('button');
-		// btn.classList.add("btnTdDel");
-		// btn.textContent = "Х";
-		// table.setAttribute("data-index", index);
-
-		// innerArray.forEach(arr => {
-			// const tr = document.createElement('tr');
-			// const td = document.createElement('td');
-			// td.textContent = arr;
-			// tr.appendChild(td);
-			// table.appendChild(tr);
-		// });
+	const getAllMyIngrid = () => {
+	  return JSON.parse(localStorage.getItem('AllMyIngrid')) || {};
+	};
+	// Константа нашого localStorage
+	const allIngredients2 = getAllMyIngrid();
 		
-		// const caption = document.createElement('caption');
-		// caption.textContent = `№ ${index + 1}`;
-		// table.appendChild(btn);
-		// table.prepend(caption);
-		// container.appendChild(table);
-
-	// });
-
-
-	// }
-
-	
-	//Підключаємо кнопку orderPanel
-	// const delItemBtn = document.querySelectorAll(".btnTdDel");
-	// delItemBtn.forEach((val, index) => {
-		// val.setAttribute("data-index", index);
-		// val.addEventListener("click", (event) => {
-		// const indexToHide = event.target.getAttribute("data-index"); // Отримуємо індекс
-		// console.log(indexToHide);
-		// deleteItemFromLocalStorage(indexToHide); // Викликаємо функцію для приховування
-		// });
-	// });	
-	// orderPanel
-	// function deleteItemFromLocalStorage(index) {
-  // Отримуємо масив із localStorage
-	// const storedArr = JSON.parse(localStorage.getItem("localArr"));
-
-  // Видаляємо елемент за індексом
-	// storedArr.splice(index, 1);
-	// hideElement(index);
-  // Оновлюємо localStorage
-	// localStorage.setItem("localArr", JSON.stringify(storedArr));
-// }
-	// function hideElement(index) {
-	  // const elementToHide = document.querySelector(`[data-index="${index}"]`);
-	  // if (elementToHide) {
-		// elementToHide.style.display = "none"; // Приховуємо елемент
-	  // }
-// }
-
-
-//-*/*-* Додавання Ігрідієнтів
-
-const getAllMyIngrid = () => {
-  return JSON.parse(localStorage.getItem('AllMyIngrid')) || {};
-};
-const allIngredients2 = getAllMyIngrid();
-	
 // Функція віднімання інгредієнтів
-function subtractIngredients(cardItems) {
+	function subtractIngredients(cardItems) {
     if (typeof cardItems !== "object" || cardItems === null) {
         console.error("Параметр має бути об'єктом");
         return;
@@ -919,23 +884,12 @@ function subtractIngredients(cardItems) {
     return allIngredients2;
 }
 
-
-
-
-const addItemsBtn = document.getElementById("AddSubtractButton");
-const addItemsDiv = document.querySelector(".addItemsDiv");
-
-// addItemsBtn.addEventListener("click", () => {
-	// addItemsDiv.classList.toggle("hide");
-// });
-
-
-  function updateIngredients(newData) {
+	function updateIngredients(newData) {
     localStorage.setItem("AllMyIngrid", JSON.stringify(newData));
     renderIngredients(); // Оновлюємо відображення
   }
 
-  function renderIngredients() {
+	function renderIngredients() {
     const container = document.getElementById("ingredientsContainer");
     container.innerHTML = ""; // Очищаємо перед оновленням
 
@@ -987,15 +941,8 @@ const addItemsDiv = document.querySelector(".addItemsDiv");
     });
   }
 
-
-
-	// document.getElementById("btnShowCount").addEventListener("click", () => {
-	// renderTable();
-	// });
-
 /////////////////////////////////////////////////////////////////////
-
-// Отримуємо елементи
+// Отримуємо елементи для модельного вікна
 const modal = document.getElementById("modal");
 const btnShowCount = document.getElementById("btnShowCount");
 const spanClose = document.querySelector(".close");
@@ -1108,8 +1055,6 @@ document.querySelectorAll('input[type="number"]').forEach(input => {
   });
 }
 
-
-
 // Додаємо новий інгредієнт
 addNewIngredientBtn.addEventListener("click", () => {
   const newKey = newIngredientInput.value.trim();
@@ -1124,8 +1069,6 @@ addNewIngredientBtn.addEventListener("click", () => {
     newAmountInput.value = ""; // Очищаємо поле вводу
   }
 });
-
-
 
 function updateAllMyIngrid(updatedIngrid) {
   localStorage.setItem('AllMyIngrid', JSON.stringify(updatedIngrid));
