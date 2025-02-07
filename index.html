@@ -32,25 +32,25 @@
 			
 			<!-- Видаляє всю інформацю з localStorage -->
 			<!-- <button class="clearLocal">ClearAll</button> -->
-
+			
+			
+			
 			<div class="addingIngBlock">	
 				<!-- Модальне вікно -->
 				<div id="modal" class="modal">
 				  <div class="modal-content">
+					<div class="addIngredient hide">
+						<input type="text" id="newIngredient" placeholder="Назва інгредієнта">
+						<input type="number" id="newAmount" placeholder="Кількість">
+						<button id="addNewIngredient">Додати інгредієнт</button>
+					</div>
 					<span class="close">&times;</span>
+					<span class="addItem">&#10010;</span>
 					<!-- <h2>Залишки інгредієнтів</h2> -->
 					<div class="ShowTable"></div>
-					<div class="addIngredient">
-					  <input type="text" id="newIngredient" placeholder="Назва інгредієнта">
-					  <input type="number" id="newAmount" placeholder="Кількість">
-					  <button id="addNewIngredient">Додати інгредієнт</button>
-					</div>
 				  </div>
 				</div>
 			</div>
-				
-		<!-- </div> -->
-
 	</div>
 </div>
 </main>
