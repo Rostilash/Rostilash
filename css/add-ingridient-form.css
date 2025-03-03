@@ -1,0 +1,150 @@
+/* Форма для додавання вартості за 1 кг */
+#ingredientForm {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position:relative;
+}
+#ingredientForm label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+#ingredientForm input[type="text"],
+#ingredientForm input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+#ingredientForm input[type="text"]:focus,
+#ingredientForm input[type="number"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
+#ingredientForm .closeForm {
+	position: absolute;
+	top: 3px;
+	right: 5px;
+	border: none;
+	color:#aaa;
+	font-weight: bold;
+	cursor: pointer;
+	transition: transform 0.5s ease-in-out;
+	font-size: 35px;
+}
+#ingredientForm .closeForm:hover{
+	color: orange;
+}
+#ingredientForm .updateForm {
+  width: 100%;
+  padding: 12px;
+  background-color: #333;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+#ingredientForm .updateForm:hover {
+  background-color: orange;
+}
+#ingredientForm .updateForm:disabled {
+  background-color: #d6d6d6;
+  cursor: not-allowed;
+}
+#ingredientForm .message {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #d9534f;
+  text-align: center;
+}
+/* Стилі для повідомлення */
+#message {
+  font-size: 16px;
+  color: #28a745;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Форма додавання ігрідієнта  */
+.addIngredient {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  width: 300px;
+  margin: 20px auto;
+}
+
+.addIngredient input {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.addIngredient input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.addIngredient button {
+  padding: 10px;
+  font-size: 16px;
+  color: white;
+  background-color: #353639;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.addIngredient button:hover {
+  background-color: #fbb128;
+  transform: scale(1.05); /* збільшення розміру кнопки */
+}
+
+.addIngredient button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+#btnShowCount {
+  padding: 8px 16px;
+  font-size: 1rem;
+  background-color: #353639; /* зелений фон */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* тінь */
+}
+
+#btnShowCount:hover {
+  background-color: #fbb128; /* темніший зелений при наведенні */
+  transform: scale(1.05); /* збільшення розміру кнопки */
+}
+
+
+#btnShowCount:active {
+  background-color: #394e6a; /* ще темніший зелений при натисканні */
+  transform: scale(1);
+}
+
+.col-ingrid {
+	font-size: x-small;
+}

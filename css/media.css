@@ -1,0 +1,184 @@
+@media screen and (max-width: 992px){
+	.items{
+		height: 50vh;
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		gap: 20px 10px;
+	}
+	.item-buttons button {
+		font-size: 16px
+	}
+	.col-additions select {
+		width: 50px;
+	}
+	.SearchItemIcon{
+		top: 10px;
+		left: 30%;
+	}
+	.sameBtn {
+		left: 50px;
+	}
+
+}
+
+
+@media screen and (max-width: 768px) {
+	.items{
+		height: 50vh;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 20px 10px;
+	}
+	.item p {
+		font-weight: 500;
+		font-size: 22px;
+	}
+	.col-ingrid, .col-number{
+		display: none;
+	}
+	.orders-table thead {
+		display: grid;
+		grid-template-columns: 12% 27% 18% 18% 1fr;
+	}
+	.orders-table tbody .col-number {
+		display: none;
+	}
+	.orders-table tbody {
+		display: grid;
+		grid-template-columns: 12% 27% 18% 18% 1fr;
+	}
+	.orders-table ul li {
+		width: 5rem;
+	}
+	.show-table thead {
+		display: grid;
+		grid-template-columns: 22% 14% 15% 17% 15%;
+	}	
+	.show-table tbody {
+		display: grid;
+		grid-template-columns: 22% 14% 15% 17% 15%;
+	}
+	.col-image img {
+		width: 40px;
+		height: 35px;
+	}
+	.SearchItemIcon{
+		left: 20%;
+	}
+	.close{
+		top: 0;
+		right: 3%;
+		color:white;
+	}
+	#orderSummaryRow p {
+		padding: 15px;
+		font-size: 16px;
+		text-align: left;
+	}
+	.sameBtn {
+		left: 80px;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	#ingredientTable {
+		grid-template-columns: 21% 13% 16% 12% 8% auto;
+		font-size: 15px;
+	}
+
+	#ingredientTable thead {
+		font-size: 10px;
+		grid-template-columns: 27% 16% 17% 14% 10% auto;
+	}
+	#ingredientTable tbody {
+		grid-template-columns: 27% 16% 17% 14% 10% auto;
+	}
+	.addItem {
+		left: 18%;
+		top: 1%;
+		color: white;
+	}
+	.update {
+		padding: 1px 5px;
+	}
+	#ingredientTable input {
+		width: 50px;
+		border: none;
+	}
+	.modal-content {
+		width: 100%;
+	}
+	.modal-content {
+		margin: 0px;
+		padding: 0px;
+		border: none;
+		max-height: 100vh;
+	}
+}
+
+
+@media screen and (max-width: 450px) {
+	.container {
+		width: 100vw;
+	}
+	.items {
+		height: 50vh;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 20px 10px;
+	}
+	.item h1 {
+		font-weight: 900;
+		font-size: 18px;
+	}
+	.header-row .col-ingrid, .header-row.col-number, .header-row .col-image,.header-row .col-number, .orders-table .col-image{
+		display:  none;
+	}
+
+	.show-table thead {
+		display: grid;
+		grid-template-columns:  35% 15% 20% 14% 1fr;
+    }	
+	.show-table tbody {
+		display: grid;
+		grid-template-columns:  35% 15% 20% 14% 1fr;
+    }
+	.show-table {
+		font-family: inherit;
+	}
+	.SearchItem{
+		width: 100%;
+		margin: 0 auto;
+	}
+	.foodOrder {
+		width: 100vw;
+		overflow: hidden;
+	}
+	.addItem {
+		left: 28%;
+	}
+	.show-table thead th {
+		font-size: 10px;
+	}	
+	.orders-table thead {
+		display: grid;
+		grid-template-columns: auto auto auto auto;
+	}
+	.orders-table tbody{
+		display: grid;
+		grid-template-columns: auto auto auto auto;
+	}
+	.addCost{
+		top: 25px;
+		left: 40px;
+	}
+
+}
+
+
+.hide {
+	display: none  !important;
+}
+.hidden {
+	display: none; 
+}

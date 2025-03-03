@@ -1,0 +1,197 @@
+.js-items-open-block {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    position: fixed;
+	top: 0;
+	right: 0;
+    width: 35px;
+    height: 35px;
+    z-index: 150;
+	cursor: pointer;
+	color: black;
+	border: solid 1px black;
+	border-radius: 20px;
+	background-color: white;
+}
+.items {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	gap: 15px 20px;
+	height: 60vh;
+	flex-wrap: wrap; /* Блоку не дозволяється переносити елементи на новий рядок */
+	overflow-x: auto; /* Додає горизонтальну прокрутку */
+	overflow-y: hide; /* Вимикає вертикальну прокрутку */
+	background-color: #f3f3f3;
+	padding: 45px 10px;
+    max-height: 500px;
+    transition: max-height 2s ease, padding-top 1s ease;
+}
+.open-block-hide {
+	padding: 15px 10px;
+	max-height: 0px;
+}
+.items-padding-top {
+	
+	padding: 0px 10px;
+}
+
+.items::-webkit-scrollbar {
+    display: none; /* Для Chrome, Safari, Edge */
+}
+.item {
+    max-height: 8rem;
+    min-height: 150px;
+    overflow: hidden;
+    position: relative;
+    transition: background-color 0.5s ease, width 1s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center; 
+	border-radius: 20px;
+	box-shadow: 3px 1px 8px rgb(0 0 0 / 19%);
+	/* clip-path: path("M 10,50 L 90,50 A 10,10 0,0,0 100,40 L 100,10 A 10,10 0,0,1 110,0 L 190,0 A 10,10 0,0,1 200,10 L 200,190 A 10,10 0,0,1 190,200 L 10,200, A 10,10 0,0,1 0,190 L 0,60 A 10,10 0,0,1 10,50 Z"); */
+}
+.item:hover{
+	box-shadow: 2px 6px 7px rgb(0 0 0 / 60%);
+}
+@keyframes scaleUp {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.25);
+    }
+}
+.item-title{
+	position: relative;
+	top: 0;
+	width: 100%;
+}
+.item-title-text {
+    text-align: center;
+	font-size: 14px; 
+	cursor: pointer;
+	z-index: 5;
+	padding: 5px;
+	opacity: 1;
+	transition: opacity 0.4s;
+	color: black;
+	font-weight: 800;
+}
+.item:hover  .item-title-text{
+	opacity: 1;
+	color: orange;
+	font-size: 22px;
+	width: 100%;
+	background-color: rgb(0 0 0 / 50%);
+}
+.item img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+	object-fit: cover;
+	z-index: 0;
+	padding-top: 30px;
+}
+.item-buttons {
+	position: absolute;
+	bottom: 0;
+    display: flex;
+	width: 100%;
+    justify-content: center;  
+    align-items: center;   
+}
+.item-buttons button {
+	background-color: #44444496;
+    transition: background-color 0.3s ease-in-out, 
+                color 1s ease-in-out, 
+                font-size 0.3s ease-in-out;
+	position: absolute;		
+	border: none;	
+	color: white;
+	font-weight: 900;
+    font-size: 16px;
+	cursor: pointer;
+}
+.btn1 {
+	border-radius: 0 20px;
+    left: 0px;
+    bottom: 0px;
+    padding: 10px 20px;
+}
+.btn2 {
+	border-radius: 20px 0;
+    right: 0px;
+    bottom: 0px;
+	padding: 10px 15px;
+} 
+.sameBtn{
+	left: 35%;
+    border-radius: 14px;
+    padding: 10px 22px;
+}
+.item-buttons button:hover {
+	background-color: #fbb128;
+	color: black;
+	font-size: 1.2rem;
+}
+/* Додавання нових страв */
+.addItemInfo {
+	max-height: 8rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+
+}
+.addItemInfo span {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #333;
+    transition: color 0.3s ease;
+}
+.addItemInfo:hover {
+    background: rgba(0, 0, 0, 0.15);
+    transform: scale(1.1);
+	background-image: url('../img/logo.nitai.jpg'); /* Фон */
+    background-size: cover; /* Масштабування */
+    background-position: center; /* Вирівнювання */
+    background-repeat: no-repeat; /* Не повторювати */
+}
+.addItemInfo:hover span {
+    color: #fbb128; /* Зміна кольору при наведенні */
+    animation: pulse 1s infinite;
+
+}
+/* пульсація для + */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+#saveBtn, #saveArr{
+	font-size: 1rem;
+    padding: 8px 16px;
+    background-color: #353639;
+    color: white;
+    cursor: pointer;
+    margin: 10px;
+    border-radius: 8px;
+	border: none;
+	transition: background-color 0.5s ease, width 1s ease-in-out;
+}
+#saveBtn:hover, #saveArr:hover {
+	background-color: #fbb128;
+	transform: scale(1.05); /* збільшення розміру кнопки */
+}
+
+
+

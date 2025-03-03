@@ -1,0 +1,79 @@
+/* Таблиця Замовлення */
+.show-table {
+	width: 100%;
+  border-collapse: collapse;
+}
+.show-table thead {
+    display: grid;
+    grid-template-columns:  5% 19% 9% 10% 33% 7% auto;
+    background-color: #313741;
+    color: white;
+    text-transform: uppercase;
+    transition: background-color 0.5s ease, width 1s ease-in-out;
+}
+.show-table thead .header-row {
+  display: contents; /* Дозволяє використовувати grid в <thead> */
+}
+.show-table th {
+  padding: 10px;
+  text-align: center;
+  font-size: 15px;
+}
+.show-table tbody {
+  display: grid;
+  grid-template-columns:  5% 19% 9% 10% 33% 7% auto;
+}
+.show-table tr {
+  display: contents; /* Дозволяє вирівняти рядки */
+}
+.show-table td {
+	border-right: solid 1px black;
+    padding: 5px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	min-height: 65px;
+    border-bottom: 1px solid rgb(2 2 2 / 52%);
+	
+}
+/* Клас для анімації на елементах */
+.opacityShowRow {
+  color: gainsboro;
+  opacity: 0;  
+  transition: opacity 1s ease, color 0.2s ease;
+}
+/* Стиль для кнопок */
+.show-table button {
+	background-color: #353639;
+    color: white;
+    border: none;
+	height: 30px;
+    width: 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.show-table button:hover {
+  background-color: #fbb128;
+  transform: scale(1.3); /* збільшення розміру кнопки */
+}
+.show-table tfoot {
+	background-color: #313741;
+}
+/* Виснок  */
+#orderSummaryRow p {
+	color: white;
+    padding: 25px;
+	font-weight: bold;
+}
+.low-count {
+	color: #87ec87;
+}
+.medium-count {
+    color: orange;
+}
+.high-count {
+    color: red;
+}
+

@@ -1,0 +1,110 @@
+.ordersContainer {
+	margin-bottom: 15px;
+}
+.foodOrder {
+	color: black;
+	text-align: center;
+	padding: 5px;
+	font-size: 1rem;
+}
+.orders-table { 
+	width: 100%; 
+	border-collapse: collapse;
+	margin-top: 10px;
+	margin-bottom: 1rem;
+}
+.orders-table thead {
+    display: grid;
+	grid-template-columns: 50px 100px 1fr 1fr 1fr 1fr;
+    background-color: #313741;
+    color: white;
+    text-transform: uppercase;
+    transition: background-color 0.5s ease, width 1s ease-in-out;
+	font-size: 15px;
+	}
+.orders-table thead .header-row {
+  display: contents; /* Дозволяє використовувати grid в <thead> */
+}
+.orders-table tbody {
+  display: grid;
+  grid-template-columns: 50px 100px 1fr 1fr 1fr 1fr;
+}
+.orders-table tr {
+  display: contents; /* Дозволяє вирівняти рядки */
+}
+.orders-table th, .orders-table td {
+	border-right: solid 1px black;
+	border-bottom: solid 1px black;
+	padding: 10px;  
+}
+.orders-table tfoot td {
+	border-right: none;
+} 
+.orders-table button {
+	cursor: pointer; 
+}
+.remove-extra {
+	color: white;
+	background-color: #313741;
+}
+/* Стиль для кнопок */
+.quantity-minus, .quantity-plus {
+	background-color: #353639;
+    color: white;
+    border: none;
+    padding: 3px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+	width: 30px;
+	height: 30px;
+}
+.add-extra {
+	background-color: #353639;
+	color: white;
+	padding: 5px;
+	border: none;
+}
+.orders-table button:hover {
+  background-color: #fbb128;
+  transform: scale(1.05); /* збільшення розміру кнопки */
+}
+
+/* Списки в додатках */
+.orders-table ul {
+  list-style: none;
+  padding: 0;
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+.orders-table ul tr td{
+    font-size: 15px;
+    text-align: center;
+    font-weight: 100;
+}
+.orders-table ul li {
+    width: 12rem;
+    padding: 5px;
+    margin: 0 auto;
+    text-align: right;
+}
+.orders-table tfoot {
+	display: grid;
+    grid-template-columns: 50% 50%;
+}
+.header-row td {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.col-image img{
+    width: 65px;
+    height: 65px;
+    border-radius: 82px;
+}
+.extra-select {
+	width: 100px;
+}
+.col-quantity-block {
+	justify-content: space-between;
+}
